@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Minijuegos</title>
+  <style>
+    @font-face {
+      font-family: 'REE';
+      src: url('fonts/04B_30__.TTF') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Ros';
+      src: url('fonts/Ros.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      position: relative;
+      background-attachment: fixed;
+      background-color: #222121;
+      background-image: url('images/index/pixil-gif-drawing.gif');
+      background-repeat: no-repeat;
+      background-size: 861px;
+      background-position: top;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      z-index: -1;
+    }
+
+    .container {
+      position: relative;
+      bottom: -350px;
+      border-radius: 7px;
+      width: 250px;
+      height: 115px;
+      border: 5px solid black;
+      background-color: rgba(228, 172, 172, 0.5);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-family: 'REE', sans-serif;
+      font-size: 28px;
+      color: rgba(0, 0, 0, );
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    a {
+      font-family: 'Ros', sans-serif;
+      display: block;
+      padding: 10px;
+      background-color: #974b4b;
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #666;
+      transform: translate(0, -2px);
+    }
+
+    a:active {
+      transform: translate(0, -4px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>EMPEZAR</h1>
+    <a href="Instruccion1.html">Jugar</a>
+  </div>
+</body>
+
+</html>
