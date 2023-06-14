@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Operaciones matemáticas</title>
+    <style>
+        @font-face {
+            font-family: 'Ros';
+            src: url('fonts/Ros.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        html,
+        body {
+            background-color: #222121;
+            background-image: url("images/nivel2/Fondo.png");
+            background-repeat: no-repeat;
+            background-size: 860px;
+            background-position: top;
+            z-index: -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-attachment: relative;
+            overflow: hidden;
+        }
+
+        #imagenConsola {
+            position: relative;
+            top: 100px;
+            left: 390px;
+            animation: mover 4s infinite ease-in-out alternate;
+        }
+
+        #imagenMesa {
+            position: relative;
+            bottom: -200px;
+        }
+
+        #imagenDialog {
+            position: relative;
+            top: -425px;
+            left: 410px;
+            animation: mover 4s infinite ease-in-out alternate;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #imagenDialog.oculto {
+            opacity: 0.85;
+        }
+
+
+        #npc1 {
+            position: relative;
+            z-index: -1;
+            top: -1010px;
+            left: -200px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #npc1.oculto {
+            opacity: 1;
+        }
+
+        #npc2 {
+            position: relative;
+            z-index: -1;
+            top: -1450px;
+            left: -200px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #npc2.oculto {
+            opacity: 1;
+        }
+
+        #npc3 {
+            position: relative;
+            z-index: -1;
+            top: -1850px;
+            left: -180px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #npc3.oculto {
+            opacity: 1;
+        }
+
+        #npc4 {
+            position: relative;
+            z-index: -1;
+            top: -2350px;
+            left: -160px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #npc4.oculto {
+            opacity: 1;
+        }
+
+        #npc5 {
+            position: relative;
+            z-index: -1;
+            top: -2820px;
+            left: -180px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #npc5.oculto {
+            opacity: 1;
+        }
+
+        #correcto {
+            position: relative;
+            top: -2940px;
+            left: 136px;
+            z-index: 1;
+            opacity: 0;
+            animation: mover 4s infinite ease-in-out alternate;
+        }
+
+        #correcto.visible {
+            opacity: 1;
+        }
+
+        #error {
+            position: relative;
+            top: -2985px;
+            left: 136px;
+            z-index: 1;
+            opacity: 0;
+            animation: mover 4s infinite ease-in-out alternate;
+        }
+
+        #error.visible {
+            opacity: 1;
+        }
+
+        @keyframes mover {
+            0% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) translateY(-10px);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            position: relative;
+            top: 512px;
+            left: 275px;
+            z-index: 1;
+            padding: 10px;
+            font-size: 18px;
+            border: 5px solid #554949;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            width: 64px;
+            height: 63px;
+            background-color: rgba(255, 227, 196, 0.897);
+            text-align: center;
+            font-family: 'Ros', sans-serif;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+            animation: mover 4s infinite ease-in-out alternate;
+        }
+
+        button {
+            font-family: 'Ros', sans-serif;
+            position: relative;
+            right: -372px;
+            bottom: -410px;
+            z-index: 1;
+            background-color: rgb(255, 227, 196, 0.897);
+            color: #443a3a;
+            padding: 8px 12px;
+            font-size: 12px;
+            border: 5px solid #554949;
+            border-radius: 3px;
+            cursor: pointer;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+            animation: mover 4s infinite ease-in-out alternate;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        #resultado {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #mensaje {
+            position: fixed;
+            top: 250px;
+            margin-bottom: 30px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        #current-operation {
+            font-family: 'Ros', sans-serif;
+            position: fixed;
+            top: 130px;
+            left: 57%;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            z-index: 1;
+            animation: mover 4s infinite ease-in-out alternate;
+        }
+
+        #dialog {
+            font-family: 'Ros', sans-serif;
+            position: fixed;
+            top: 110px;
+            left: 57%;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            z-index: 1;
+            animation: mover 4s infinite ease-in-out alternate;
+            opacity: 1;
+        }
+
+        .transition-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 999;
+            opacity: 1;
+            transition: opacity 3s ease-in-out;
+        }
+
+        .transition-layer.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Animación de inicio */
+        @keyframes start-animation {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Animación de victoria */
+        @keyframes victory-animation {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <p id="dialog"></p>
+    <p id="current-operation" data-answer="0"></p>
+    <p id="mensaje"></p>
+    <input type="text" id="player-answer">
+    <button id="answer-button">Enviar</button>
+    <div id="imagenMesa">
+        <img src="images/nivel2/FondoMesa.png" width="860" height="270" alt="Imagen">
+    </div>
+    <div id="imagenConsola">
+        <img src="images/nivel2/consola.png" width="350" height="200" alt="Imagen">
+    </div>
+    <div id="imagenDialog">
+        <img src="images/nivel2/Dialog.png" width="700" height="500" alt="Imagen">
+    </div>
+    </div>
+    <div id="npc1">
+        <img src="images/nivel2/npc1.png" width="275" height="420" alt="Imagen">
+    </div>
+    <div id="npc2">
+        <img src="images/nivel2/npc2.png" width="295" height="420" alt="Imagen">
+    </div>
+    <div id="npc3">
+        <img src="images/nivel2/npc3.png" width="325" height="480" alt="Imagen">
+    </div>
+    <div id="npc4">
+        <img src="images/nivel2/npc4.png" width="375" height="420" alt="Imagen">
+    </div>
+    <div id="npc5">
+        <img src="images/nivel2/npc5.png" width="275" height="550" alt="Imagen">
+    </div>
+    <div id="correcto">
+        <img src="images/nivel2/correcto.png" width="40" height="40" alt="Imagen">
+    </div>
+    <div id="error">
+        <img src="images/nivel2/error.png" width="40" height="40" alt="Imagen">
+    </div>
+    <div id="resultado"></div>
+
+    <div class="transition-layer"></div>
+
+    <script>
+        let attempts = 0;
+        const maxAttempts = 3;
+        const mensajeElemento = document.querySelector("#mensaje");
+        const mensajeElementoOperacion = document.querySelector("#current-operation");
+        const operationDialog = document.querySelector("#dialog");
+        const imgDialog = document.getElementById('imagenDialog');
+        const npc1 = document.getElementById('npc1');
+        const npc2 = document.getElementById('npc2');
+        const npc3 = document.getElementById('npc3');
+        const npc4 = document.getElementById('npc4');
+        const npc5 = document.getElementById('npc5');
+        const correcto = document.getElementById('correcto');
+        const error = document.getElementById('error');
+
+        window.addEventListener("load", function () {
+            var transitionLayer = document.querySelector(".transition-layer");
+            transitionLayer.style.animation = "start-animation 3s ease-in-out";
+            setTimeout(function () {
+                transitionLayer.classList.add("hidden");
+            }, 3000);
+        });
+
+        // Definir las cuatro operaciones matemáticas con texto asociado
+        const operations = [
+            {
+                text: '',
+                answer: 8,
+                additionalText: '1',
+            },
+            {
+                text: '¿en cuanto me sale todo?',
+                answer: 16,
+                additionalText: '2',
+            },
+            {
+                text: '',
+                answer: 44,
+                additionalText: '3',
+            },
+            {
+                text: '¿Cual es el precio total?',
+                answer: 76,
+                additionalText: '4',
+            },
+            {
+                text: '',
+                answer: 15,
+                additionalText: '5',
+            },
+            {
+                text: '¿cuánto cambio me queda?',
+                answer: 18,
+                additionalText: '6',
+            },
+            {
+                text: '',
+                answer: 21,
+                additionalText: '7',
+            },
+            {
+                text: 'Cada uno cuesta 4 ¿cuánto debo pagar?',
+                answer: 78,
+                additionalText: '8',
+            },
+            {
+                text: '',
+                answer: 5,
+                additionalText: '9',
+            },
+            {
+                text: '¿cuanto debo pagar?',
+                answer: 15,
+                additionalText: '10',
+            },
+        ];
+
+        function generateOperation(index) {
+            const operation = operations[index];
+            const operationText = `${operation.text}`;
+            const operationAnswer = operation.answer;
+
+            return {
+                text: operationText,
+                answer: operationAnswer,
+            };
+        }
+
+        function checkAnswer() {
+            const playerAnswer = document.getElementById('player-answer').value;
+            const currentOperation = document.getElementById('current-operation');
+
+            // Obtener la respuesta actual del juego
+            const answer = parseInt(currentOperation.getAttribute('data-answer'));
+
+            if (parseInt(playerAnswer) === answer) {
+                // Respuesta correcta
+                attempts = 0;
+                const currentIndex = parseInt(currentOperation.getAttribute('data-index'));
+                if (currentIndex === 0) {
+                    document.getElementById('player-answer').value = '';
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+                    setTimeout(function () {
+                        // Mostrar la segunda operación
+                        const nextIndex = 1;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Si una cereza cuesta 2$";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        correcto.classList.remove("visible");
+                        document.getElementById('answer-button').disabled = false;
+                    }, 2500)
+                }
+                else if (currentIndex === 1) {
+                    // Mostrar mensaje después de la segunda operación
+                    document.getElementById('player-answer').value = '';
+                    operationDialog.textContent = "";
+                    mensajeElementoOperacion.textContent = "¡Eso es muchas gracias!";
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+
+                    setTimeout(function () {
+                        mensajeElementoOperacion.textContent = "";
+                        imgDialog.classList.remove("oculto");
+                    }, 2500)
+
+                    setTimeout(function () {
+                        npc1.classList.remove("oculto");
+                        correcto.classList.remove("visible");
+                    }, 3000)
+
+                    setTimeout(function () {
+                        npc2.classList.add("oculto");
+                    }, 6000)
+
+                    setTimeout(function () {
+                        imgDialog.classList.add("oculto");
+                    }, 7000)
+
+                    setTimeout(function () {
+                        // Mostrar la tercera operación
+                        const nextIndex = 2;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Buen dia, necesito (9*4)+8 de moras";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        document.getElementById('answer-button').disabled = false;
+                    }, 7300);
+
+                }
+                else if (currentIndex === 2) {
+                    document.getElementById('player-answer').value = '';
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+                    setTimeout(function () {
+                        // Mostrar la cuarta operación
+                        const nextIndex = 3;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Si la docena cuesta 20$ y la unidad 2 pesos";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        correcto.classList.remove("visible");
+                        document.getElementById('answer-button').disabled = false;
+                    }, 2500)
+
+                }
+                else if (currentIndex === 3) {
+                    // Mostrar mensaje después de la segunda operación
+                    document.getElementById('player-answer').value = '';
+                    operationDialog.textContent = "";
+                    mensajeElementoOperacion.textContent = "¡Eso es muchas gracias!";
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+
+                    setTimeout(function () {
+                        mensajeElementoOperacion.textContent = "";
+                        imgDialog.classList.remove("oculto");
+                    }, 2500)
+
+                    setTimeout(function () {
+                        npc2.classList.remove("oculto");
+                        correcto.classList.remove("visible");
+                    }, 3000)
+
+                    setTimeout(function () {
+                        npc3.classList.add("oculto");
+                    }, 6000)
+
+                    setTimeout(function () {
+                        imgDialog.classList.add("oculto");
+                    }, 7000)
+
+                    setTimeout(function () {
+                        const nextIndex = 4;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Saludos, por favor dame (3*10)/2 zanahorias";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        document.getElementById('answer-button').disabled = false;
+                    }, 7300);
+                }
+                else if (currentIndex === 4) {
+                    document.getElementById('player-answer').value = '';
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+                    setTimeout(function () {
+                        // Mostrar la cuarta operación
+                        const nextIndex = 5;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Si son 5 zanahorias por 18$ y pago con 72$";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        correcto.classList.remove("visible");
+                        document.getElementById('answer-button').disabled = false;
+                    }, 2500)
+
+                }
+                else if (currentIndex === 5) {
+                    // Mostrar mensaje después de la segunda operación
+                    document.getElementById('player-answer').value = '';
+                    operationDialog.textContent = "";
+                    mensajeElementoOperacion.textContent = "¡Eso es muchas gracias!";
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+
+                    setTimeout(function () {
+                        mensajeElementoOperacion.textContent = "";
+                        imgDialog.classList.remove("oculto");
+                    }, 2500)
+
+                    setTimeout(function () {
+                        npc3.classList.remove("oculto");
+                        correcto.classList.remove("visible");
+                    }, 3000)
+
+                    setTimeout(function () {
+                        npc4.classList.add("oculto");
+                    }, 6000)
+
+                    setTimeout(function () {
+                        imgDialog.classList.add("oculto");
+                    }, 7000)
+
+                    setTimeout(function () {
+                        // Mostrar la tercera operación
+                        const nextIndex = 6;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "¿Que tal? por favor vendame (5*9)-(8*3) de pescado";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        document.getElementById('answer-button').disabled = false;
+                    }, 7300);
+                }
+                else if (currentIndex === 6) {
+                    document.getElementById('player-answer').value = '';
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+                    setTimeout(function () {
+                        // Mostrar la cuarta operación
+                        const nextIndex = 7;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Si compro mas 18 pescados, los demas estan al 50%";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        correcto.classList.remove("visible");
+                        document.getElementById('answer-button').disabled = false;
+                    }, 2500)
+
+                }
+                else if (currentIndex === 7) {
+                    // Mostrar mensaje después de la segunda operación
+                    document.getElementById('player-answer').value = '';
+                    operationDialog.textContent = "";
+                    mensajeElementoOperacion.textContent = "¡Eso es muchas gracias!";
+                    document.getElementById('answer-button').disabled = true;
+                    correcto.classList.add("visible");
+
+                    setTimeout(function () {
+                        mensajeElementoOperacion.textContent = "";
+                        imgDialog.classList.remove("oculto");
+                    }, 2500)
+
+                    setTimeout(function () {
+                        correcto.classList.remove("visible");
+                        npc4.classList.remove("oculto");
+                    }, 3000)
+
+                    setTimeout(function () {
+                        npc5.classList.add("oculto");
+                    }, 6000)
+
+                    setTimeout(function () {
+                        imgDialog.classList.add("oculto");
+                    }, 7000)
+
+                    setTimeout(function () {
+                        // Mostrar la tercera operación
+                        const nextIndex = 8;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Necesito 7*2-9 pedazos de sandia";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        document.getElementById('answer-button').disabled = false;
+                    }, 7300);
+                }
+                else if (currentIndex === 8) {
+                    document.getElementById('player-answer').value = '';
+                    correcto.classList.add("visible");
+                    document.getElementById('answer-button').disabled = true;
+                    setTimeout(function () {
+                        // Mostrar la cuarta operación
+                        const nextIndex = 9;
+                        const nextOperation = generateOperation(nextIndex);
+
+                        operationDialog.textContent = "Si una sandia entera trae 12 pedazos y cuesta 36$";
+
+                        currentOperation.innerText = nextOperation.text;
+                        currentOperation.setAttribute('data-answer', nextOperation.answer);
+                        currentOperation.setAttribute('data-index', nextIndex);
+                        correcto.classList.remove("visible");
+                        document.getElementById('answer-button').disabled = false;
+                    }, 2500)
+                }
+                else if (currentIndex === 9) {
+                    operationDialog.textContent = "";
+                    document.getElementById('player-answer').value = '';
+                    mensajeElementoOperacion.textContent = "¡Eso es muchas gracias!";
+                    document.getElementById('answer-button').disabled = true;
+                    correcto.classList.add("visible");
+
+                    setTimeout(function () {
+                        mensajeElementoOperacion.textContent = "";
+                        imgDialog.classList.remove("oculto");
+                    }, 2500)
+
+                    setTimeout(function () {
+                        correcto.classList.remove("visible");
+                        npc5.classList.remove("oculto");
+                    }, 3000)
+                    setTimeout(function () {
+                        var transitionLayer = document.querySelector(".transition-layer");
+                        transitionLayer.style.animation = "victory-animation 3s ease-in-out";
+                        transitionLayer.classList.remove("hidden");
+                        setTimeout(function () {
+                            window.location.href = "Instruccion3.html";
+                        }, 7600);
+                    }, 4000);
+
+                }
+
+            } else {
+                document.getElementById('answer-button').disabled = true;
+                error.classList.add("visible");
+                setTimeout(function () {
+                    error.classList.remove("visible");
+                    document.getElementById('answer-button').disabled = false;
+                }, 3000)
+            }
+        }
+
+        // Obtener la primera operación
+        const firstOperation = generateOperation(0);
+        setTimeout(function () {
+            mensajeElementoOperacion.textContent = "";
+            imgDialog.classList.add("oculto");
+        }, 3000)
+
+        setTimeout(function () {
+            npc1.classList.add("oculto");
+        }, 2500)
+
+        // Mostrar la primera operación en la página
+        setTimeout(function () {
+            const currentOperation = document.getElementById('current-operation');
+            operationDialog.textContent = "Hola ¿podria darme (12-8)*2 cerezas?";
+            currentOperation.innerText = firstOperation.text;
+            currentOperation.setAttribute('data-answer', firstOperation.answer);
+            currentOperation.setAttribute('data-index', 0);
+        }, 3200)
+
+        // Configurar el botón de "Responder"
+        const answerButton = document.getElementById('answer-button');
+        answerButton.addEventListener('click', checkAnswer);
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }); 
+    </script>
+</body>
+
+</html>

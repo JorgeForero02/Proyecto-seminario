@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Juego de memoria</title>
+  <style>
+    @font-face {
+      font-family: 'REE';
+      src: url('fonts/04B_30__.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Ros';
+      src: url('fonts/Ros.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      background-color: #222121;
+      background-image: url("images/nivel3/Fondo.png");
+      background-repeat: no-repeat;
+      background-size: 861px;
+      background-position: top;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-attachment: relative;
+      overflow: hidden;
+    }
+
+    #game-board {
+      position: relative;
+      display: grid;
+      top: -233px;
+      left: 60px;
+      grid-template-columns: repeat(5, 0fr);
+      justify-content: center;
+      gap: 13px;
+      column-gap: 13px;
+      align-content: center;
+      margin: 0 auto;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 7px;
+      background-image: url('images/nivel3/pixil-layer-0.png');
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: center;
+      width: 100px;
+      height: 88px;
+      background-color: #f1f1f1;
+      border: 5px solid rgb(0, 0, 0);
+      align-content: center;
+      display: flex;
+      cursor: pointer;
+      transition: transform 0.3s;
+      box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.7);
+      transition: transform 0.2s ease-out;
+    }
+
+    .card:hover {
+      transform: translate(0, -7px);
+    }
+
+    .card:active {
+      transform: translate(0, -12px);
+    }
+
+    .card.flip {
+      align-self: center;
+      transform: rotateY(180deg);
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .card .front-image img,
+    .card .back-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+
+
+    .card .front-image {
+      display: block;
+    }
+
+    .card .back-image {
+      display: none;
+    }
+
+    .card.flip .front-image {
+      display: none;
+    }
+
+    .card.flip .back-image {
+      display: block;
+    }
+
+    .card-text {
+      position: relative;
+      top: 42%;
+      left: 22%;
+      text-align: right;
+      z-index: 1;
+      font-size: 13px;
+      color: rgb(0, 0, 0);
+      font-family: 'Ros', sans-serif;
+    }
+
+    #score {
+      position: relative;
+      font-family: 'REE', sans-serif;
+      top: -466px;
+      left: -270px;
+      font-size: 14px;
+      margin-top: 20px;
+      transform: translate(-50%, -50%);
+      animation: mover 1s infinite ease-in-out alternate;
+      color: rgb(255, 203, 107);
+    }
+
+    #timer {
+      position: relative;
+      font-family: 'REE', sans-serif;
+      color: rgb(255, 255, 255);
+      top: -777px;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    #reset-button {
+      position: relative;
+      top: -710px;
+      left: -270px;
+      font-family: 'REE', sans-serif;
+      font-size: 16px;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: transparent;
+      color: rgb(161, 255, 98);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      animation: mover 1s infinite ease-in-out alternate;
+    }
+
+    #reset-button:hover {
+      color: rgb(53, 126, 38);
+    }
+
+    #carpeta1 {
+      position: relative;
+      top: 180px;
+      left: -259px;
+      transform: translate(-50%, -50%);
+      animation: mover 1s infinite ease-in-out alternate;
+    }
+
+    #carpeta2 {
+      position: relative;
+      top: 230px;
+      left: -259px;
+      transform: translate(-50%, -50%);
+      animation: mover 1s infinite ease-in-out alternate;
+    }
+
+    #carpeta3 {
+      position: relative;
+      top: 280px;
+      left: -259px;
+      transform: translate(-50%, -50%);
+      animation: mover 1s infinite ease-in-out alternate;
+    }
+
+    @keyframes mover {
+      0% {
+        transform: translate(-50%, -50%) translateY(0);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) translateY(-5px);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) translateY(0);
+      }
+    }
+
+    .transition-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      z-index: 999;
+      opacity: 1;
+      transition: opacity 3s ease-in-out;
+    }
+
+    .transition-layer.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Animación de inicio */
+    @keyframes start-animation {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Animación de victoria */
+    @keyframes victory-animation {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="carpeta1">
+    <img src="images/nivel3/Carpeta1.png" width="160" height="120" alt="Imagen">
+  </div>
+  <div id="carpeta2">
+    <img src="images/nivel3/Carpeta2 .png" width="160" height="120" alt="Imagen">
+  </div>
+  <div id="carpeta3">
+    <img src="images/nivel3/Carpeta3.png" width="160" height="120" alt="Imagen">
+  </div>
+  <div id="game-board">
+    <div class="card" data-framework="a">
+      <div class="front-image">
+        <div class="card-text">&nbsp;&nbsp;28-7</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-1.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="a">
+      <div class="front-image">
+        <div class="card-text">&nbsp;&nbsp;3*7</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-1.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="b">
+      <div class="front-image">
+        <div class="card-text">2*4+7-1</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-2.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="b">
+      <div class="front-image">
+        <div class="card-text">&nbsp;&nbsp;8+6</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-2.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="c">
+      <div class="front-image">
+        <div class="card-text">8/2+3*6</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-3.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="c">
+      <div class="front-image">
+        <div class="card-text">&nbsp;&nbsp;4+18</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-3.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="d">
+      <div class="front-image">
+        <div class="card-text">3*4-8+7</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-4.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="d">
+      <div class="front-image">
+        <div class="card-text">&nbsp;12-8+7</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-4.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="e">
+      <div class="front-image">
+        <div class="card-text">6+5*7-8</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-5.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="e">
+      <div class="front-image">
+        <div class="card-text">&nbsp;6+35-8</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-5.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="f">
+      <div class="front-image">
+        <div class="card-text">4*2+6-1</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-6.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="f">
+      <div class="front-image">
+        <div class="card-text">&nbsp;8+6-1</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-6.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="g">
+      <div class="front-image">
+        <div class="card-text">9-2*5+3</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-7.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="g">
+      <div class="front-image">
+        <div class="card-text">&nbsp;9-10+3</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-7.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="h">
+      <div class="front-image">
+        <div class="card-text">6/1+8*2</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-8.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="h">
+      <div class="front-image">
+        <div class="card-text">&nbsp;&nbsp;6+16</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-8.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="i">
+      <div class="front-image">
+        <div class="card-text">8+6/2+1</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-9.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="i">
+      <div class="front-image">
+        <div class="card-text">&nbsp;8+3+1</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-9.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="j">
+      <div class="front-image">
+        <div class="card-text">9-5/1+2</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-10.png" width="127" height="120"></div>
+    </div>
+    <div class="card" data-framework="j">
+      <div class="front-image">
+        <div class="card-text">&nbsp;9-5+2</div>
+      </div>
+      <div class="back-image"><img src="images/nivel3/pixil-layer-10.png" width="127" height="120"></div>
+    </div>
+  </div>
+  <div id="score">Puntuacion <span id="score-value">0</span></div>
+  <div id="timer">Tiempo: <span id="timer-value">180</span></div>
+  <button id="reset-button">Reiniciar</button>
+  <div class="transition-layer"></div>
+
+  <script>
+    // obtenemos las tarjetas y el boton de reinicio
+    const cards = document.querySelectorAll(".card");
+    const resetButton = document.getElementById("reset-button");
+
+    // variables para llevar el registro del juego
+    let score = 0;
+    let flippedCards = [];
+    let hasFlippedCard = false;
+    let lockBoard = false;
+    let secondsLeft = 180;
+    let countdownTimer;
+
+    window.addEventListener("load", function () {
+      var transitionLayer = document.querySelector(".transition-layer");
+      transitionLayer.style.animation = "start-animation 3s ease-in-out";
+      setTimeout(function () {
+        transitionLayer.classList.add("hidden");
+      }, 3000);
+    });
+
+    // funcion para barajar las tarjetas al inicio del juego y despues de cada ronda
+    function shuffleCards() {
+      cards.forEach(card => {
+        let randomPos = Math.floor(Math.random() * cards.length);
+        card.style.order = randomPos;
+      });
+    }
+
+    // funcion para voltear la tarjeta y mostrar su imagen
+    function flipCard() {
+      // si ya hay dos tarjetas volteadas o la tabla esta bloqueada no se permite voltear mas tarjetas
+      if (lockBoard || this === flippedCards[0]) return;
+
+      this.classList.add("flip");
+
+      if (!hasFlippedCard) {
+        hasFlippedCard = true;
+        flippedCards[0] = this;
+      } else {
+        hasFlippedCard = false;
+        flippedCards[1] = this;
+
+        if (flippedCards[0].dataset.framework === flippedCards[1].dataset.framework) {
+          score += 10;
+          flippedCards.forEach(card => {
+            card.removeEventListener("click", flipCard);
+          });
+        } else {
+          lockBoard = true;
+          flippedCards.forEach(card => {
+            setTimeout(() => {
+              card.classList.remove("flip");
+              lockBoard = false;
+            }, 1000);
+          });
+        }
+
+        flippedCards = [];
+        updateScore();
+        checkWin();
+
+      }
+    }
+
+    // funcion para actualizar el temporizador en la pantalla y finalizar el juego cuando se acabe el tiempo
+    function updateScore() {
+      const scoreElement = document.getElementById("score");
+      scoreElement.textContent = `Puntos: ${score}`;
+    }
+
+
+
+    function countDown() {
+      let timer = document.getElementById("timer");
+      timer.textContent = "Tiempo: " + secondsLeft;
+      secondsLeft--;
+      if (secondsLeft < 0) {
+        clearInterval(countdownTimer);
+        timer.textContent = "Se acabo el tiempo!!!";
+        resetScore();
+        cards.forEach(card => {
+          card.removeEventListener("click", flipCard);
+        });
+      }
+    }
+
+    function resetScore() {
+      score = 0;
+      let scoreDisplay = document.getElementById("score");
+      scoreDisplay.textContent = "Puntuacion " + score;
+    }
+
+    // funcion para actualizar el puntaje en la pantalla
+    function updateScore() {
+      let scoreBoard = document.getElementById("score");
+      scoreBoard.textContent = "Puntuacion " + score;
+    }
+
+    // funcion para verificar si se han volteado todas las tarjetas y mostrar el mensaje de victoria
+    function checkWin() {
+      let flippedCount = 0;
+      cards.forEach(card => {
+        if (card.classList.contains("flip")) {
+          flippedCount++;
+        }
+      });
+      if (flippedCount === cards.length) {
+        clearInterval(countdownTimer);
+        setTimeout(function () {
+          var transitionLayer = document.querySelector(".transition-layer");
+          transitionLayer.style.animation = "victory-animation 3s ease-in-out";
+          transitionLayer.classList.remove("hidden");
+          setTimeout(function () {
+            window.location.href = "Index.html";
+          }, 4600);
+        }, 1500);
+      }
+    }
+
+    // funcion para reiniciar el juego
+    function resetGame() {
+      resetButton.disabled = true;
+      score = 0;
+      flippedCards = [];
+      hasFlippedCard = false;
+      lockBoard = false;
+      secondsLeft = 180;
+      resetScore();
+      shuffleCards();
+      clearInterval(countdownTimer); // Detener el intervalo existente
+      countdownTimer = setInterval(countDown, 1000); // Iniciar un nuevo intervalo
+      setTimeout(() => { resetButton.disabled = false; }, 1000);
+      cards.forEach(card => {
+        card.classList.remove("flip");
+        card.addEventListener("click", flipCard);
+      });
+    }
+
+    // evento de clic al botón de reinicio
+    resetButton.addEventListener("click", resetGame);
+
+    // barajamos las tarjetas al inicio del juego
+    shuffleCards();
+
+    cards.forEach(card => card.addEventListener("click", flipCard));
+
+    countdownTimer = setInterval(countDown, 1000);
+
+  </script>
+</body>
+
+</html>

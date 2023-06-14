@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Siguiente nivel</title>
+    <style>
+        body {
+            background-color: #222121;
+            background-image: url("images/nivel3/capas3.png");
+            background-repeat: no-repeat;
+            background-size: 861px;
+            background-position: top;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            bottom: -530px;
+        }
+
+        .button {
+            display: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            background-color: rgb(255, 227, 196, 0.897);
+            color: #443a3a;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #534336;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button id="redirectButton" class="button" onclick="redirectToOtherPage()">Continuar</button>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById("redirectButton").style.display = "block";
+        }, 10000);
+
+        function redirectToOtherPage() {
+            window.location.href = "Nivel3.html";
+        }
+    </script>
+</body>
+
+</html>
